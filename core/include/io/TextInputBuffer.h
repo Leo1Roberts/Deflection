@@ -1,0 +1,73 @@
+#ifndef TEXT_INPUT_BUFFER_H
+#define TEXT_INPUT_BUFFER_H
+
+#include <utility>
+
+#include "Event.h"
+
+
+enum class TextInputMode { Simple, Rich };
+
+enum class TextInputEventEffect { None, Cursor, Buffer };
+
+
+class TextInputBuffer {
+public:
+	using Validator = std::function<bool(char, int, const std::string&)>;
+	static bool Float(char c, int cursor = 0, const std::string& buffer = "");
+	static bool File(char c, int cursor = 0, const std::string& buffer = "");
+
+	explicit TextInputBuffer(Validator validator, TextInputMode mode = TextInputMode::Rich)
+		: charIsValid(std::move(validator)), mode(mode) {}
+
+	TextInputEventEffect processEvent(const Event& event);
+
+	void clear() { buffer.clear(); }
+
+	void moveCursorTo(int index, bool highlight = false);
+	void selectWord(int charIndex);
+	void selectAll() { selectionStartIndex = 0; selectionEndIndex = (int)buffer.length(); }
+	void deselectAll() { selectionStartIndex = selectionEndIndex = cursorIndex; }
+	void eraseSelection() {
+		buffer.erase(buffer.begin() + selectionStartIndex, buffer.begin() + selectionEndIndex);
+		moveCursorTo(selectionStartIndex);
+	}
+
+	void setText(const std::string& text) {
+		buffer = text;
+		cursorIndex = selectionStartIndex = selectionEndIndex = (int)text.length();
+	}
+
+	template <typename T>
+	T getValue() const;
+
+	[[nodiscard]] bool isEmpty() const { return buffer.empty(); }
+	[[nodiscard]] int getCursorIndex() const { return cursorIndex; }
+	[[nodiscard]] int getSelectionStartIndex() const { return selectionStartIndex; }
+	[[nodiscard]] int getSelectionEndIndex() const { return selectionEndIndex; }
+
+private:
+	enum class CharClass { Word, Whitespace, Punctuation };
+
+	[[nodiscard]] static CharClass getCharClass(char c);
+	[[nodiscard]] int getWordJumpCursorIndex(bool left) const;
+
+	Validator charIsValid;
+	TextInputMode mode;
+	std::string buffer;
+
+	int cursorIndex = 0;
+	int selectionStartIndex = 0;
+	int selectionEndIndex = 0;
+};
+
+template <>
+inline const std::string& TextInputBuffer::getValue<const std::string&>() const { return buffer; }
+template <>
+inline std::optional<float> TextInputBuffer::getValue<std::optional<float>>() const {
+	try { return std::stof(buffer); }
+	catch (...) { return std::nullopt; }
+}
+
+
+#endif // TEXT_INPUT_BUFFER_H
