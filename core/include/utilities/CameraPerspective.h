@@ -13,6 +13,7 @@ public:
 
 	void rotateHeading(float radians);
 	void rotatePitch(float radians);
+	void setOrigin(glm::vec3 o) { origin = o; }
 
 	[[nodiscard]] const glm::mat4& getViewMatrix() const { return viewMatrix; }
 	[[nodiscard]] const glm::mat4& getProjectionMatrix() const { return projectionMatrix; }

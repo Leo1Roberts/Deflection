@@ -2,7 +2,7 @@
 
 #include "system/AbstractWindow.h"
 #include "AppMode.h"
-#include "EmptyMode.h"
+#include "GameMode.h"
 #include "ui/FPSOverlay.h"
 
 
@@ -19,7 +19,7 @@ App::App(std::unique_ptr<AbstractWindow> appWindow) : window(std::move(appWindow
 	// fps->setLayout({ .margin = glm::vec2(10.f) });
 	// fpsOverlay = overlayUI.addNode(std::move(fps));
 
-	content = std::make_unique<EmptyMode>();
+	content = std::make_unique<GameMode>();
 
 	quadVertices.emplace_back(glm::vec2(-1, 1), glm::vec2(0, 1));
 	quadVertices.emplace_back(glm::vec2(-1, -1), glm::vec2(0, 0));
@@ -54,7 +54,7 @@ bool App::tick(microseconds dt) {
 	glViewport(0, 0, window->config.width, window->config.height);
 	glScissor(0, 0, window->config.width, window->config.height);
 
-	glClearColor(0.2f, 0.2f, 0.2f, 1);
+	glClearColor(0.f, 0.f, 0.f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (content)

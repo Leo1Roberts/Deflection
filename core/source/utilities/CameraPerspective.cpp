@@ -1,5 +1,7 @@
 #include "utilities/CameraPerspective.h"
 
+#include <algorithm>
+
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "utilities/MatrixUtilities.h"
@@ -19,9 +21,7 @@ void CameraPerspective::reset() {
 }
 
 void CameraPerspective::update(float screenWidth, float screenHeight) {
-	if (screenWidth == 0.f || screenHeight == 0.f) return;
-
-	projectionMatrix = glm::perspectiveFov(fieldOfView, screenWidth, screenHeight, 0.1f, 100.f);
+	projectionMatrix = glm::perspectiveFov(fieldOfView, screenWidth, screenHeight, 0.01f, 1e6f);
 
 	float ch = cosf(heading);
 	float sh = sinf(heading);
@@ -29,8 +29,8 @@ void CameraPerspective::update(float screenWidth, float screenHeight) {
 	float sp = sinf(pitch);
 
 	glm::vec3 eye = {
-		origin.x + distance * cp * ch,
-		origin.y + distance * cp * sh,
+		origin.x - distance * cp * ch,
+		origin.y - distance * cp * sh,
 		origin.z + distance * sp
 	};
 
@@ -41,5 +41,6 @@ void CameraPerspective::rotateHeading(float radians) {
 	heading = wrapAngle(heading + radians);
 }
 void CameraPerspective::rotatePitch(float radians) {
-	pitch = wrapAngle(pitch + radians);
+	constexpr float limit = glm::half_pi<float>() - 0.1f;
+	pitch = std::clamp(pitch + radians, -limit, limit);
 }

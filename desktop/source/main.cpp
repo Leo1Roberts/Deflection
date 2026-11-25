@@ -1,5 +1,5 @@
 #include "App.h"
-#include "EmptyMode.h"
+#include "GameMode.h"
 #include "GlfwWindow.h"
 #include "opengl/Shader.h"
 
@@ -375,7 +375,7 @@ int main() {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_SRGB_CAPABLE, GLFW_TRUE);
 
-	int width = 1920, height = 1080;
+	int width = 800, height = 600;
 
 	GLFWwindow* rawWindow = glfwCreateWindow(width, height, "Deflection", nullptr, nullptr);
 

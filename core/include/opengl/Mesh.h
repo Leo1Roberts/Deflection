@@ -72,7 +72,8 @@ template <>
 Mesh<ObjectVertex>::Mesh(const std::string& path, col color);
 
 namespace Meshes {
-	extern std::unique_ptr<Mesh<ObjectVertex>> ball;
+	extern std::unique_ptr<Mesh<ObjectVertex>> planet;
+	extern std::unique_ptr<Mesh<ObjectVertex>> ship;
 
 	void load();
 }

@@ -97,9 +97,11 @@ Mesh<ObjectVertex>::Mesh(const std::string& path, col color) : Mesh(GL_STATIC_DR
 }
 
 namespace Meshes {
-	std::unique_ptr<Mesh<ObjectVertex>> ball;
+	std::unique_ptr<Mesh<ObjectVertex>> planet;
+	std::unique_ptr<Mesh<ObjectVertex>> ship;
 
 	void load() {
-		ball = std::make_unique<Mesh<ObjectVertex>>("models/Ball.obj");
+		planet = std::make_unique<Mesh<ObjectVertex>>("models/Planet.obj");
+		ship = std::make_unique<Mesh<ObjectVertex>>("models/Ship.obj");
 	}
 }
