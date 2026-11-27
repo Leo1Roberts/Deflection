@@ -40,6 +40,18 @@ void Ship::processEvent(const Event& event) {
 				else if (key->action == KeyAction::Up)
 					rotating.y = std::min(rotating.y + 1, 1);
 				break;
+			case KeyCode::E:
+				if (key->action == KeyAction::Down)
+					rotating.z = std::min(rotating.z + 1, 1);
+				else if (key->action == KeyAction::Up)
+					rotating.z = std::max(rotating.z - 1, -1);
+				break;
+			case KeyCode::Q:
+				if (key->action == KeyAction::Down)
+					rotating.z = std::max(rotating.z - 1, -1);
+				else if (key->action == KeyAction::Up)
+					rotating.z = std::min(rotating.z + 1, 1);
+				break;
 			default:;
 		}
 	}
@@ -48,9 +60,10 @@ void Ship::processEvent(const Event& event) {
 
 void Ship::applyForces() {
 	glm::quat orientation = glm::quat_cast(rotation);
-	glm::quat qHeading = glm::angleAxis(angularVelocity * rotating.x * PHYSICS_TIMESTEP, glm::vec3(0.f, 0.f, 1.f));
-	glm::quat qPitch   = glm::angleAxis(angularVelocity * rotating.y * PHYSICS_TIMESTEP, glm::vec3(0.f, 1.f, 0.f));
-	rotation = glm::mat3_cast(glm::normalize(orientation * qHeading * qPitch));
+	glm::quat qHeading = glm::angleAxis(angularVelocity * (float)rotating.x * PHYSICS_TIMESTEP, glm::vec3(0.f, 0.f, 1.f));
+	glm::quat qPitch   = glm::angleAxis(angularVelocity * (float)rotating.y * PHYSICS_TIMESTEP, glm::vec3(0.f, 1.f, 0.f));
+	glm::quat qRoll    = glm::angleAxis(angularVelocity * (float)rotating.z * PHYSICS_TIMESTEP, glm::vec3(1.f, 0.f, 0.f));
+	rotation = glm::mat3_cast(glm::normalize(orientation * qHeading * qPitch * qRoll));
 
 	if (thrusting)
 		totalForce += rotation * glm::vec3(thrustForce, 0.f, 0.f);

@@ -17,7 +17,7 @@ struct Ship {
 	glm::vec3 totalForce{0.f};
 
 	bool thrusting = false;
-	glm::ivec2 rotating{0};
+	glm::ivec3 rotating{0};
 
 	const float mass, thrustForce;
 

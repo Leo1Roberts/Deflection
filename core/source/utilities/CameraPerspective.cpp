@@ -14,7 +14,7 @@ CameraPerspective::CameraPerspective() {
 
 void CameraPerspective::reset() {
 	origin = glm::vec3(0.f);
-	distance = 5.f;
+	distance = 10.f;
 	heading = 0.f;
 	pitch = glm::radians(30.f);
 	fieldOfView = glm::radians(45.f);
