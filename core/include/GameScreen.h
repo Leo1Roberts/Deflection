@@ -27,6 +27,7 @@ private:
 	float accumulator = 0.f;
 
 	UIText* speed;
+	UIText* fuel;
 };
 
 

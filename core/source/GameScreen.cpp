@@ -8,7 +8,7 @@
 #include "utilities/MatrixUtilities.h"
 
 
-GameScreen::GameScreen() : level(100) {
+GameScreen::GameScreen() : level(1) {
 	auto list = uiManager.addNode<UIVerticalList>(5.f, 0.f);
 	list->setLayout({
 		.anchor = Anchor::TopRight,
@@ -17,7 +17,18 @@ GameScreen::GameScreen() : level(100) {
 		.margin = glm::vec2(5.f)
 	});
 	
+	fuel = list->addChild<UIText>("", TextStyle{.color = Color::SoftGreen});
+	fuel->setLayout({
+		.anchor = Anchor::TopRight,
+		.widthMode = SizingMode::Wrap,
+		.heightMode = SizingMode::Wrap,
+	});
 	speed = list->addChild<UIText>("", TextStyle{.color = Color::SoftGreen});
+	speed->setLayout({
+		.anchor = Anchor::TopRight,
+		.widthMode = SizingMode::Wrap,
+		.heightMode = SizingMode::Wrap,
+	});
 
 	ship.position = level.shipStartingPosition;
 }
@@ -69,6 +80,7 @@ void GameScreen::update(microseconds dt) {
 		accumulator -= PHYSICS_TIMESTEP;
 	}
 
+	fuel->setText("Fuel: " + std::to_string((int)(100.f * ship.remainingFuelMass / Ship::fullFuelMass)) + "%");
 	speed->setText("Speed: " + std::to_string((int)length(ship.velocity)));
 
 	uiManager.update(dt);

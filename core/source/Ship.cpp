@@ -62,12 +62,13 @@ void Ship::applyForces() {
 	rotation = glm::mat3_cast(glm::normalize(orientation * qHeading * qPitch * qRoll));
 
 	if (thrusting) {
-		if (mass > dryMass) {
+		if (remainingFuelMass > 0.f) {
 			totalForce += rotation * glm::vec3(thrustForce, 0.f, 0.f);
-			mass -= 0.000005f;
+			remainingFuelMass -= 0.000003f;
 		}
 	}
 
+	mass = dryMass + remainingFuelMass;
 	auto acceleration = totalForce / mass;
 	velocity += acceleration * PHYSICS_TIMESTEP;
 	position += velocity * PHYSICS_TIMESTEP;

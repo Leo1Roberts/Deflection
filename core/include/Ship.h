@@ -21,7 +21,8 @@ struct Ship {
 
 	static constexpr float dryMass = 1.5f, fullFuelMass = 0.5f, thrustForce = 20.f;
 
-	float mass = dryMass + fullFuelMass;
+	float remainingFuelMass = fullFuelMass;
+	float mass = dryMass + remainingFuelMass;
 
 	static constexpr float angularVelocity = glm::radians(45.f);
 };
