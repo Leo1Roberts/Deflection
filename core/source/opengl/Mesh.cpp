@@ -101,7 +101,7 @@ namespace Meshes {
 	std::unique_ptr<Mesh<ObjectVertex>> ship;
 
 	void load() {
-		planet = std::make_unique<Mesh<ObjectVertex>>("models/Planet.obj");
-		ship = std::make_unique<Mesh<ObjectVertex>>("models/Ship.obj");
+		planet = std::make_unique<Mesh<ObjectVertex>>("models/Planet.obj", Color::White);
+		ship = std::make_unique<Mesh<ObjectVertex>>("models/Ship.obj", Color::LightGrey);
 	}
 }

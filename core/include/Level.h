@@ -11,6 +11,7 @@ class Level {
 public:
 	explicit Level(int number);
 
+	glm::vec3 shipStartingPosition{};
 	std::vector<Planet> planets;
 
 private:

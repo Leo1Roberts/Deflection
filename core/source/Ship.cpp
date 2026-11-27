@@ -3,10 +3,6 @@
 #include "glm/gtc/quaternion.hpp"
 
 
-Ship::Ship(float mass, float thrustForce) :
-	mass(mass), thrustForce(thrustForce) {}
-
-
 void Ship::processEvent(const Event& event) {
 	if (auto key = std::get_if<KeyEvent>(&event)) {
 		switch (key->chord.code) {
@@ -65,8 +61,12 @@ void Ship::applyForces() {
 	glm::quat qRoll    = glm::angleAxis(angularVelocity * (float)rotating.z * PHYSICS_TIMESTEP, glm::vec3(1.f, 0.f, 0.f));
 	rotation = glm::mat3_cast(glm::normalize(orientation * qHeading * qPitch * qRoll));
 
-	if (thrusting)
-		totalForce += rotation * glm::vec3(thrustForce, 0.f, 0.f);
+	if (thrusting) {
+		if (mass > dryMass) {
+			totalForce += rotation * glm::vec3(thrustForce, 0.f, 0.f);
+			mass -= 0.000005f;
+		}
+	}
 
 	auto acceleration = totalForce / mass;
 	velocity += acceleration * PHYSICS_TIMESTEP;

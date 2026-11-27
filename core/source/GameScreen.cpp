@@ -8,7 +8,7 @@
 #include "utilities/MatrixUtilities.h"
 
 
-GameScreen::GameScreen() : level(1), ship(2.f, 20.f) {
+GameScreen::GameScreen() : level(100) {
 	auto list = uiManager.addNode<UIVerticalList>(5.f, 0.f);
 	list->setLayout({
 		.anchor = Anchor::TopRight,
@@ -18,6 +18,8 @@ GameScreen::GameScreen() : level(1), ship(2.f, 20.f) {
 	});
 	
 	speed = list->addChild<UIText>("", TextStyle{.color = Color::SoftGreen});
+
+	ship.position = level.shipStartingPosition;
 }
 
 
@@ -56,13 +58,18 @@ void GameScreen::update(microseconds dt) {
 		for (const auto& planet : level.planets) {
 			if (length2(planet.position - ship.position) <= planet.radius * planet.radius) {
 				ship.velocity = glm::vec3(0.f);
+				if (planet.home) {
+					// level complete
+				} else {
+					// crashed
+				}
 			}
 		}
 
 		accumulator -= PHYSICS_TIMESTEP;
 	}
 
-	speed->setText("Speed: " + std::to_string((int)length(ship.velocity)) + "m/s");
+	speed->setText("Speed: " + std::to_string((int)length(ship.velocity)));
 
 	uiManager.update(dt);
 }
@@ -90,7 +97,7 @@ void GameScreen::render() {
 		ship.position, ship.rotation);
 
 	for (const Planet& planet : level.planets)
-		drawObject(Meshes::planet.get(), Textures::white.get(),
+		drawObject(Meshes::planet.get(), planet.home ? Textures::blue.get() : Textures::white.get(),
 			planet.position, glm::mat3(1), glm::vec3(planet.radius));
 
 	glDisable(GL_DEPTH_TEST);

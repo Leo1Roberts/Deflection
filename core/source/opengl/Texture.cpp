@@ -41,8 +41,10 @@ Texture::Texture(const std::string& path, bool monochrome, bool saveData) {
 
 namespace Textures {
 	std::unique_ptr<Texture> white;
+	std::unique_ptr<Texture> blue;
 
 	void load() {
 		white = std::make_unique<Texture>("textures/white.png");
+		blue = std::make_unique<Texture>("textures/blue.png");
 	}
 }

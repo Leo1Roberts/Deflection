@@ -34,6 +34,7 @@ private:
 
 namespace Textures {
 	extern std::unique_ptr<Texture> white;
+	extern std::unique_ptr<Texture> blue;
 
 	void load();
 }

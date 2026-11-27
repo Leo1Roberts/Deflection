@@ -8,14 +8,16 @@
 
 
 struct Planet {
-	Planet(float radius, glm::vec3 position)
+	Planet(float radius, glm::vec3 position, bool home = false)
 		: radius(radius),
 		  mass(4.f/3.f * glm::pi<float>() * radius*radius*radius * PLANET_DENSITY),
-		  position(position) {}
+		  position(position),
+		  home(home) {}
 
 	float radius;
 	float mass;
 	glm::vec3 position;
+	bool home = false;
 };
 
 

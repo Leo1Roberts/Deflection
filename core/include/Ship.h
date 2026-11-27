@@ -5,7 +5,7 @@
 
 
 struct Ship {
-	Ship(float mass, float thrustForce);
+	Ship() = default;
 
 	void processEvent(const Event& event);
 
@@ -19,7 +19,9 @@ struct Ship {
 	bool thrusting = false;
 	glm::ivec3 rotating{0};
 
-	const float mass, thrustForce;
+	static constexpr float dryMass = 1.5f, fullFuelMass = 0.5f, thrustForce = 20.f;
+
+	float mass = dryMass + fullFuelMass;
 
 	static constexpr float angularVelocity = glm::radians(45.f);
 };
